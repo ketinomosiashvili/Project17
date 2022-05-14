@@ -27,25 +27,27 @@ function printData(data) {
     });
 
 function createPost(item) {
-    let divWrapper = document.createElement('div');
-    divWrapper.classList.add('posts');
-    divWrapper.setAttribute('data-id', item.id);
+    let divWraper = document.createElement('div');
+    divWraper.classList.add('posts');
+    divWraper.setAttribute('data-id', item.id);
 
     let h2Tag = document.createElement('h2');
     h2Tag.innerText = item.id;
 
     let h3Tag = document.createElement('h3');
     h3Tag.innerText = item.title;
+    h3Tag.classList.add('h3-title')
 
     let deleteButton = document.createElement('button');
-    deleteButton.innerText = 'DELETE POST';
+    deleteButton.innerText = 'Delete Post';
     deleteButton.setAttribute('data-id', item.id);
+    deleteButton.classList.add('delete-post-button')
 
-    divWrapper.appendChild(h2Tag);
-    divWrapper.appendChild(h3Tag);
-    divWrapper.appendChild(deleteButton);
+    divWraper.appendChild(h2Tag);
+    divWraper.appendChild(h3Tag);
+    divWraper.appendChild(deleteButton);
 
-    divWrapper.addEventListener('click', function(event) {
+    divWraper.addEventListener('click', function(event) {
         let id = event.target.getAttribute('data-id');
         openOverlay(id);
     })
@@ -54,11 +56,12 @@ function createPost(item) {
         event.stopPropagation();
         let id = event.target.getAttribute('data-id');
         deletePost(id);
+        divWraper.classList.add('delete-post');
     });
 
-    mainWraperPost.appendChild(divWrapper);
+    mainWraperPost.appendChild(divWraper);
 
-    console.log(divWrapper);
+    console.log(divWraper);
 }
 
 function openOverlay(id) {
@@ -100,11 +103,11 @@ addButton.addEventListener('click', function() {
 
 form.addEventListener('submit', function(event) {
     event.preventDefault();
-    console.log(event.target);
 
     let formData = {
         title: event.target[0].value,
-        description: event.target[1].value
+        body: event.target[1].value,
+        
     }
 
     fetch('https://jsonplaceholder.typicode.com/posts', {
@@ -116,7 +119,10 @@ form.addEventListener('submit', function(event) {
     })
     .then((response) => response.json())
     .then((json) => console.log(json));
-        postOverlay.classList.remove('active-add');
         console.log(formData);
+        postOverlay.classList.remove('active-add');
+        createPost(formData);
+        
     })
 }
+
